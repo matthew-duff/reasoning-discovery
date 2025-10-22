@@ -1,0 +1,5 @@
+{
+  "name": "Minimalist eDiscovery Platform",
+  "description": "A reasoning-based e-discovery tool that queries each document individually for relevance and generates a transparent 'AI Methodology Report' showing the exact reasoning for each decision.",
+  "requestFramePermissions": []
+}
