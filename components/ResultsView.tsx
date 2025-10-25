@@ -117,7 +117,31 @@ const ResultsView: React.FC = () => {
                                         <td className="px-6 py-4 font-mono text-neutral-900">{result.docId}</td>
                                         <td className="px-6 py-4 text-neutral-900">{result.docName}</td>
                                         <td className="px-6 py-4">
-                                            <Badge decision={result.decision} />
+                                            <div className="relative group flex items-center">
+                                                <Badge decision={result.decision} />
+                                                {result.decision === 'Relevant' && result.relevanceDetails && Object.keys(result.relevanceDetails).length > 0 && (
+                                                    <div
+                                                        className="absolute z-10 w-80 p-3 invisible group-hover:visible bg-black text-white text-sm rounded-lg shadow-lg bottom-full left-1/2 -translate-x-1/2 mb-2
+                                                                   opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                                        role="tooltip"
+                                                    >
+                                                        <h4 className="font-bold mb-2 border-b border-neutral-600 pb-1">Relevance Breakdown</h4>
+                                                        <ul className="space-y-1 mt-2">
+                                                            {Object.entries(result.relevanceDetails)
+                                                                .sort(([, aIsRelevant], [, bIsRelevant]) => (bIsRelevant ? 1 : 0) - (aIsRelevant ? 1 : 0))
+                                                                .map(([category, isRelevant]) => (
+                                                                <li key={category} className="flex items-start justify-between">
+                                                                    <span className="text-neutral-300 text-xs flex-1 pr-2">{category.replace('Relevant with ', '')}</span>
+                                                                    <span className={`font-bold text-xs ${isRelevant ? 'text-green-400' : 'text-red-500'}`}>
+                                                                        {isRelevant ? '✓ Relevant' : '✗ Not Relevant'}
+                                                                    </span>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                        <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-x-8 border-x-transparent border-t-8 border-t-black"></div>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="px-6 py-4 max-w-md">
                                             <p

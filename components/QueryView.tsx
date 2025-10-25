@@ -4,6 +4,7 @@ import { useAppContext } from '../context/AppContext';
 import { processDocumentWithGemini } from '../services/geminiService';
 import { EXAMPLE_QUERIES } from '../constants';
 import ProgressBar from './ProgressBar';
+import { DiscoveryResult } from '../types';
 
 const QueryView: React.FC = () => {
     const { documents, query, setQuery, setResults, processingState, setProcessingState, setCurrentPage } = useAppContext();
@@ -22,17 +23,23 @@ const QueryView: React.FC = () => {
 
         setProcessingState({ status: 'processing', progress: 0, total: documents.length });
 
-        const newResults = [];
         for (let i = 0; i < documents.length; i++) {
             const doc = documents[i];
             const result = await processDocumentWithGemini(doc, query);
-            const discoveryResult = {
+            
+            const { reasoning, ...relevanceDetails } = result;
+
+            const isRelevant = Object.values(relevanceDetails).some(val => val === true);
+            const decision = isRelevant ? 'Relevant' : 'Not Relevant';
+
+            const discoveryResult: DiscoveryResult = {
                 docId: doc.id,
                 docName: doc.name,
-                decision: result.decision,
-                reasoning: result.reasoning
+                decision: decision,
+                reasoning: reasoning,
+                relevanceDetails: relevanceDetails
             };
-            newResults.push(discoveryResult);
+
             setResults(prev => [...prev.filter(r => r.docId !== doc.id), discoveryResult]);
             setProcessingState(prev => ({ ...prev, progress: i + 1 }));
         }

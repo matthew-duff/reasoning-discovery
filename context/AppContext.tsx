@@ -41,6 +41,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       docName: doc.name,
       decision: 'Pending',
       reasoning: 'Not yet processed.',
+      relevanceDetails: {},
     })));
     setProcessingState({ status: 'idle', progress: 0, total: 0 });
     setCurrentPage('Query');
@@ -77,6 +78,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
                 docName: file.name,
                 decision: 'Pending',
                 reasoning: 'Not yet processed.',
+                relevanceDetails: {},
             };
 
             newDocs.push(newDoc);

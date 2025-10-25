@@ -9,10 +9,15 @@ export interface Document {
 
 export type RelevanceDecision = 'Relevant' | 'Not Relevant' | 'Pending';
 
+export interface RelevanceDetails {
+    [key: string]: boolean;
+}
+
 export interface DiscoveryResult {
   docId: string;
   docName: string;
   decision: RelevanceDecision;
+  relevanceDetails?: RelevanceDetails;
   reasoning: string;
   confidence?: number;
 }
